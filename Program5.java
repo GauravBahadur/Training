@@ -2,6 +2,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+class myException extends Exception
+{
+	public myException(String s)
+	{
+		super(s);
+	}
+}
+
 public class Program5 {
 	public static void main(String[] args)throws IOException {
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
@@ -10,10 +18,10 @@ public class Program5 {
 		try {
 			if(n>100)
 			{
-				throw new ArithmeticException("Number should have been less than 100!");
+				throw new myException("Number should have been less than 100!");
 			}
 			if(n<=0) {
-				throw new ArithmeticException("Number should have been greater than 0");
+				throw new myException("Number should have been greater than 0");
 
 			}
 			else {
@@ -35,9 +43,9 @@ public class Program5 {
 					
 					
 		}
-		catch(ArithmeticException e)
+		catch(myException e)
 		{
-			System.out.println("Some exception "+e);
+			System.out.println("Exception occurred "+e);
 		}
 	}
 }
