@@ -1,7 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
- class factorial implements Runnable {
+ class factorial implements Callable<Integer> {
 	
 	int n;
 	public factorial(int n)
@@ -9,30 +14,33 @@ import java.util.concurrent.Executors;
 		this.n=n;
 	}
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		int fact=1;
-		for(int i=1;i<=n;i++)
-		{
-			fact*=i;
+		public Integer call() throws Exception {
+			int fact=1;
+			for(int i=1;i<=n;i++)
+			{
+				fact*=i;
+			}
+			return fact;
 		}
-		System.out.println("factorial of "+n+" = "+fact);
-		
-	}
-
 }
 
 class findF{
-	public static void main(String[] args)
+	public static void main(String[] args) throws InterruptedException, ExecutionException
 	{
-		int arr[]= {5, 7,12, 6, 9};
-		Runnable f;
+		int arr[]= {3, 2,5, 4, 1};
 		int maxThread=5;
-		for(int i=0;i<5;i++)
+		ExecutorService poool = Executors.newFixedThreadPool(maxThread);		
+		List<Future<Integer>> list=new ArrayList();
+		for(int i:arr)
 		{
-			f=new factorial(arr[i]);
-			ExecutorService poool = Executors.newFixedThreadPool(maxThread);			
-			poool.execute(f);
+			Future<Integer> future=poool.submit(new factorial(i));
+			list.add(future);
 		}
+		for(Future<Integer> lis:list)
+		{
+			System.out.println(lis.get());
+		}
+		poool.shutdown();
+		System.out.println("Program terminated!");
 	}
 }
